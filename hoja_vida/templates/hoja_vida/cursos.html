@@ -1,0 +1,98 @@
+{% extends 'hoja_vida/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'hoja_vida/css/cursos.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 style="margin-bottom: 20px; font-size: 2.5rem; font-weight: 700;">
+        {{ btn.titulo_vista|default:"Formación Realizada" }}
+    </h1>
+    <div class="cards-layout">
+        {% for curso in cursos %}
+        <article class="experience-card">
+            <h2 class="exp-role">
+                {{ curso.nombre_curso }}
+            </h2>
+            <div style="margin-bottom: 25px;">
+                <span class="label-style" style="display:inline;">{{ lbl.institucion }}: </span>
+                <span class="label-style" style="color: var(--text-main); display:inline;">
+                    {{ curso.entidad_patrocinadora }}
+                </span>
+            </div>
+            {% if curso.descripcion %}
+            <div class="exp-block">
+                <span class="label-style">{{ lbl.descripcion }}</span>
+                <p class="profile-description">{{ curso.descripcion }}</p>
+            </div>
+            {% endif %}
+            <div class="exp-grid">
+                {% if curso.total_horas %}
+                <div class="contact-item">
+                    <span class="label-style">{{ lbl.horas }}</span>
+                    <span class="contact-value">{{ curso.total_horas }} hrs.</span>
+                </div>
+                {% endif %}
+                <div class="contact-item">
+                    <span class="label-style">{{ lbl.inicio }}</span>
+                    <span class="contact-value">{{ curso.fecha_inicio }}</span>
+                </div>
+                <div class="contact-item">
+                    <span class="label-style">{{ lbl.fin }}</span>
+                    <span class="contact-value">{{ curso.fecha_fin }}</span>
+                </div>
+                {% if curso.nombre_contacto %}
+                <div class="contact-item">
+                    <span class="label-style">{{ lbl.contacto }}</span>
+                    <span class="contact-value">{{ curso.nombre_contacto }}</span>
+                </div>
+                {% endif %}
+                {% if curso.email_patrocinadora %}
+                <div class="contact-item">
+                    <span class="label-style">{{ lbl.email }}</span>
+                    <span class="contact-value">{{ curso.email_patrocinadora }}</span>
+                </div>
+                {% endif %}
+                {% if curso.telefono_contacto %}
+                <div class="contact-item">
+                    <span class="label-style">{{ lbl.telefono }}</span>
+                    <span class="contact-value">{{ curso.telefono_contacto }}</span>
+                </div>
+                {% endif %}
+            </div>
+            {% if curso.ruta_certificado %}
+            <div style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px;">
+                <span class="label-style" style="margin-bottom:10px;">{{ lbl.certificado }}</span>
+                <a href="{{ curso.ruta_certificado.url }}" target="_blank" class="ghost-btn">
+                    {{ lbl.certificado }} ↗
+                </a>
+            </div>
+            {% endif %}
+        </article>
+        {% empty %}
+            <p>No hay formación registrada.</p>
+        {% endfor %}
+    </div>
+    <nav class="nav-menu" style="margin-top: 60px;">
+        <a href="{% url 'home' %}" class="nav-btn">
+            <span class="label-style">{{ btn.home }}</span>
+        </a>
+        <a href="{% url 'experiencia' %}" class="nav-btn">
+            <span class="label-style">{{ btn.experiencia }}</span>
+        </a>
+        <a href="{% url 'reconocimientos' %}" class="nav-btn">
+            <span class="label-style">{{ btn.reconocimientos }}</span>
+        </a>
+        <a href="{% url 'productos' %}" class="nav-btn">
+            <span class="label-style">
+                {{ btn.prod_academico }} / {{ btn.prod_laboral }}
+            </span>
+        </a>
+        <a href="{% url 'venta_garage' %}" class="nav-btn">
+            <span class="label-style">{{ btn.ventas }}</span>
+        </a>
+    </nav>
+</div>
+{% endblock %}

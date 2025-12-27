@@ -1,0 +1,89 @@
+{% extends 'hoja_vida/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'hoja_vida/css/productos.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 style="margin-bottom: 20px; font-size: 2.5rem; font-weight: 700;">
+        Producción Académica / Laboral
+    </h1>
+    {% if prod_academicos %}
+        <h2 class="section-separator">{{ titulos.academico }}</h2>
+        <div class="cards-layout">
+            {% for item in prod_academicos %}
+            <article class="experience-card">
+                <h2 class="exp-role">
+                    {{ item.nombre_recurso }}
+                </h2>
+                <div style="margin-bottom: 25px;">
+                    <span class="label-style" style="display:inline;">{{ lbl.acad_tipo }}: </span>
+                    <span class="label-style" style="color: var(--text-main); display:inline;">
+                        {{ item.clasificador }}
+                    </span>
+                </div>
+                {% if item.descripcion %}
+                <div class="exp-block" style="border-bottom: none; margin-bottom: 0; padding-bottom: 0;">
+                    <span class="label-style">{{ lbl.acad_desc }}</span>
+                    <p class="profile-description">{{ item.descripcion }}</p>
+                </div>
+                {% endif %}
+            </article>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% if prod_laborales %}
+        <h2 class="section-separator" style="{% if prod_academicos %}margin-top: 60px;{% endif %}">
+            {{ titulos.laboral }}
+        </h2>
+        <div class="cards-layout">
+            {% for item in prod_laborales %}
+            <article class="experience-card">
+                <h2 class="exp-role">
+                    {{ item.nombre_producto }}
+                </h2>
+                {% if item.descripcion %}
+                <div class="exp-block" style="border-bottom: none; padding-bottom: 0; margin-bottom: 23px;">
+                    <span class="label-style">{{ lbl.lab_desc }}</span>
+                    <p class="profile-description">{{ item.descripcion }}</p>
+                </div>
+                {% endif %}
+                <div class="exp-grid">
+                    <div class="contact-item">
+                        <span class="label-style">{{ lbl.lab_fecha }}</span>
+                        <span class="contact-value">{{ item.fecha_producto }}</span>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <nav class="nav-menu" style="margin-top: 80px;">
+        <a href="{% url 'home' %}" class="nav-btn">
+            <span class="label-style">{{ btn.home }}</span>
+        </a>
+        {% if flags.hay_experiencia %}
+        <a href="{% url 'experiencia' %}" class="nav-btn">
+            <span class="label-style">{{ btn.experiencia }}</span>
+        </a>
+        {% endif %}
+        {% if flags.hay_reconocimientos %}
+        <a href="{% url 'reconocimientos' %}" class="nav-btn">
+            <span class="label-style">{{ btn.reconocimientos }}</span>
+        </a>
+        {% endif %}
+        {% if flags.hay_cursos %}
+        <a href="{% url 'cursos' %}" class="nav-btn">
+            <span class="label-style">{{ btn.cursos }}</span>
+        </a>
+        {% endif %}
+        {% if flags.hay_ventas %}
+        <a href="{% url 'venta_garage' %}" class="nav-btn">
+            <span class="label-style">{{ btn.ventas }}</span>
+        </a>
+        {% endif %}
+    </nav>
+</div>
+{% endblock %}

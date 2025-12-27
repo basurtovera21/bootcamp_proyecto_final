@@ -1,0 +1,75 @@
+{% extends 'hoja_vida/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'hoja_vida/css/venta_garage.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 style="margin-bottom: 20px; font-size: 2.5rem; font-weight: 700;">
+        {{ btn.titulo_vista|default:"Venta de Garage" }}
+    </h1>
+    <div class="cards-layout">
+        {% for item in ventas %}
+        <article class="experience-card">
+            <div class="garage-flex">
+                <div class="garage-img-container">
+                    {% if item.foto %}
+                        <img src="{{ item.foto.url }}" alt="{{ item.nombre_producto }}" class="product-img">
+                    {% else %}
+                        <div class="no-photo">Sin Foto</div>
+                    {% endif %}
+                </div>
+                <div class="garage-info">
+                    <h2 class="exp-role">
+                        {{ item.nombre_producto }}
+                    </h2>
+                    <div class="garage-meta-grid status-divider">
+                        <div class="meta-item">
+                            <span class="label-style">{{ lbl.precio }}</span>
+                            <span class="price-tag" style="display:block; margin-left:0; margin-top:5px;">
+                                $ {{ item.valor_bien }}
+                            </span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="label-style">{{ lbl.estado }}</span>
+                            <span class="contact-value" style="display:block; margin-top:5px;">
+                                {{ item.estado_producto }}
+                            </span>
+                        </div>
+                    </div>
+                    {% if item.descripcion %}
+                    <div class="exp-block" style="border:none; padding:0; margin:0;">
+                        <span class="label-style">{{ lbl.descripcion }}</span>
+                        <p class="profile-description">{{ item.descripcion }}</p>
+                    </div>
+                    {% endif %}
+                </div> 
+            </div> 
+        </article>
+        {% empty %}
+            <p>No hay artículos en venta por el momento.</p>
+        {% endfor %}
+    </div>
+    <nav class="nav-menu" style="margin-top: 60px;">
+        <a href="{% url 'home' %}" class="nav-btn">
+            <span class="label-style">{{ btn.home }}</span>
+        </a>
+        <a href="{% url 'experiencia' %}" class="nav-btn">
+            <span class="label-style">{{ btn.experiencia }}</span>
+        </a>
+        <a href="{% url 'reconocimientos' %}" class="nav-btn">
+            <span class="label-style">{{ btn.reconocimientos }}</span>
+        </a>
+        <a href="{% url 'cursos' %}" class="nav-btn">
+            <span class="label-style">{{ btn.cursos }}</span>
+        </a>
+        <a href="{% url 'productos' %}" class="nav-btn">
+            <span class="label-style">
+                {{ btn.prod_academico }} / {{ btn.prod_laboral }}
+            </span>
+        </a>
+    </nav>
+</div>
+{% endblock %}

@@ -1,0 +1,93 @@
+{% extends 'hoja_vida/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'hoja_vida/css/home.css' %}">
+{% endblock %}
+
+{% block content %}
+    {% if perfil %}
+        <div class="header-card">
+            <div class="photo-placeholder">
+                {% if perfil.foto %}
+                    <img src="{{ perfil.foto.url }}" alt="Foto de perfil">
+                {% else %}
+                {% endif %}
+            </div>
+            <div class="header-info">
+                <p class="id-role">Estudiante, Ingeniería de Software</p>
+                <h1 class="id-name">{{ perfil.nombres }} {{ perfil.apellidos }}</h1>
+                <div style="margin-top: 30px;">
+                    <span class="label-style">{{ lbl.descripcion }}</span>
+                    <div class="profile-description">
+                        {% if perfil.descripcion_perfil %}
+                            {{ perfil.descripcion_perfil }}
+                        {% else %}
+                            <span style="color: #999;">...</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bottom-layout">
+            <aside class="left-data">
+                <h3 style="margin-bottom: 30px; font-size: 1.4rem; color: var(--accent-color);">
+                    {{ lbl.info_personal|upper }}
+                </h3>
+                <ul class="contact-list">
+                    {% for item in datos_dinamicos %}
+                        <li class="contact-item">
+                            <span class="label-style">{{ item.label }}</span>
+                            {% if item.es_link %}
+                                <a href="{{ item.valor }}" target="_blank" class="data-link">
+                                    Enlace ↗
+                                </a>
+                            {% else %}
+                                <span class="contact-value">{{ item.valor }}</span>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </aside>
+            <nav class="nav-menu">
+                {% if flags.hay_experiencia %}
+                <a href="{% url 'experiencia' %}" class="nav-btn">
+                    <span class="label-style">{{ btn.experiencia }}</span>
+                </a>
+                {% endif %}
+                {% if flags.hay_reconocimientos %}
+                <a href="{% url 'reconocimientos' %}" class="nav-btn">
+                    <span class="label-style">{{ btn.reconocimientos }}</span>
+                </a>
+                {% endif %}
+                {% if flags.hay_cursos %}
+                <a href="{% url 'cursos' %}" class="nav-btn">
+                    <span class="label-style">{{ btn.cursos }}</span>
+                </a>
+                {% endif %}
+                {% if flags.hay_productos %}
+                <a href="{% url 'productos' %}" class="nav-btn">
+                    <span class="label-style">
+                        {{ btn.prod_academico }} / {{ btn.prod_laboral }}
+                    </span>
+                </a>
+                {% endif %}
+                {% if flags.hay_ventas %}
+                <a href="{% url 'venta_garage' %}" class="nav-btn">
+                    <span class="label-style">{{ btn.ventas }}</span>
+                </a>
+                {% endif %}
+            </nav>
+        </div>
+        {% else %}
+        <div class="container" style="text-align: center; padding: 150px 20px;">
+            <h1 style="color: var(--accent-color); font-size: 1.5rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0;">
+                No existe ningún perfil activo
+            </h1>
+            <p style="color: #000; font-weight: 500; font-size: 1.1rem; line-height: 1.6;margin-top: 0;">
+                No se encontró información.<br>
+                Por favor, verifique el panel de administración.
+            </p>
+        </div>
+    {% endif %}
+{% endblock %}

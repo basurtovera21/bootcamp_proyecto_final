@@ -1,0 +1,15 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>{{ titulo_pestana|default:"Hoja de vida" }}</title>
+    <link rel="stylesheet" href="{% static 'hoja_vida/css/global.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>

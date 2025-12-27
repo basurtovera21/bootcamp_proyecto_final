@@ -1,0 +1,113 @@
+{% extends 'hoja_vida/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'hoja_vida/css/experiencia.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 style="margin-bottom: 20px; font-size: 2.5rem; font-weight: 700;">
+        {{ btn.experiencia_titulo|default:"Experiencia Profesional" }}
+    </h1>
+    <div class="cards-layout">
+        {% for exp in experiencias %}
+        <article class="experience-card">
+            <h2 class="exp-role">
+                {{ exp.cargo_desempenado }}
+            </h2>
+            <div style="margin-bottom: 25px;">
+                <span class="label-style" style="display:inline;">{{ lbl.empresa }}: </span>
+                <span class="label-style" style="color: var(--text-main); display:inline;">
+                    {{ exp.nombre_empresa }}
+                </span>
+            </div>
+            {% if exp.descripcion_funciones %}
+            <div class="exp-block">
+                <span class="label-style">{{ lbl.descripcion }}</span>
+                <p class="profile-description">{{ exp.descripcion_funciones }}</p>
+            </div>
+            {% endif %}
+            <div class="exp-grid"> 
+                {% if exp.lugar_empresa %}
+                <div class="contact-item">
+                    <span class="label-style">{{ lbl.direccion }}</span>
+                    <span class="contact-value">{{ exp.lugar_empresa }}</span>
+                </div>
+                {% endif %}
+                {% if exp.email_empresa %}
+                <div class="contact-item">
+                    <span class="label-style">{{ lbl.email }}</span>
+                    <span class="contact-value">{{ exp.email_empresa }}</span>
+                </div>
+                {% endif %}
+                {% if exp.nombre_contacto %}
+                <div class="contact-item">
+                    <span class="label-style">{{ lbl.responsable }}</span>
+                    <span class="contact-value">{{ exp.nombre_contacto }}</span>
+                </div>
+                {% endif %}
+                {% if exp.telefono_contacto %}
+                <div class="contact-item">
+                    <span class="label-style">{{ lbl.telefono }}</span>
+                    <span class="contact-value">{{ exp.telefono_contacto }}</span>
+                </div>
+                {% endif %}
+                <div class="contact-item">
+                    <span class="label-style">{{ lbl.fecha_inicio }}</span>
+                    <span class="contact-value">{{ exp.fecha_inicio }}</span>
+                </div>
+                {% if exp.fecha_fin %}
+                <div class="contact-item">
+                    <span class="label-style">{{ lbl.fecha_fin }}</span>
+                    <span class="contact-value">{{ exp.fecha_fin }}</span>
+                </div>
+                {% else %}
+                <div class="contact-item">
+                    <span class="label-style">{{ lbl.fecha_fin }}</span>
+                    <span class="contact-value" style="color:var(--accent-color); font-weight:700;">ACTUALIDAD</span>
+                </div>
+                {% endif %}
+                {% if exp.sitio_web_empresa %}
+                <div class="contact-item">
+                    <span class="label-style">{{ lbl.url }}</span>
+                    <a href="{{ exp.sitio_web_empresa }}" target="_blank" class="data-link">
+                        Enlace ↗
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+            {% if exp.ruta_certificado %}
+            <div style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px;">
+                <span class="label-style" style="margin-bottom:10px;">{{ lbl.constancia }}</span>
+                <a href="{{ exp.ruta_certificado.url }}" target="_blank" class="ghost-btn">
+                    {{ lbl.constancia }} ↗
+                </a>
+            </div>
+            {% endif %}
+        </article>
+        {% empty %}
+            <p>No hay experiencia laboral registrada.</p>
+        {% endfor %}
+    </div>
+    <nav class="nav-menu" style="margin-top: 60px;">
+        <a href="{% url 'home' %}" class="nav-btn">
+            <span class="label-style">{{ btn.home }}</span>
+        </a>
+        <a href="{% url 'reconocimientos' %}" class="nav-btn">
+            <span class="label-style">{{ btn.reconocimientos }}</span>
+        </a>
+        <a href="{% url 'cursos' %}" class="nav-btn">
+            <span class="label-style">{{ btn.cursos }}</span>
+        </a>
+        <a href="{% url 'productos' %}" class="nav-btn">
+            <span class="label-style">
+                {{ btn.prod_academico }} / {{ btn.prod_laboral }}
+            </span>
+        </a>
+        <a href="{% url 'venta_garage' %}" class="nav-btn">
+            <span class="label-style">{{ btn.ventas }}</span>
+        </a>
+    </nav>
+</div>
+{% endblock %}

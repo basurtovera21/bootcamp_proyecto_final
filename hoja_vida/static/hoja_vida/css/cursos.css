@@ -1,0 +1,83 @@
+.cards-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 40px; 
+}
+
+.experience-card {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    padding: 40px;
+    box-shadow: var(--shadow);
+    transition: transform 0.2s ease;
+}
+
+.experience-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+}
+
+.exp-role {
+    font-size: 1.5rem;
+    font-weight: 700;           
+    color: var(--accent-color); 
+    text-transform: uppercase;  
+    margin-bottom: 15px;
+    line-height: 1.1;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
+}
+
+.exp-block {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.profile-description {
+    font-size: 1.1rem;          
+    font-weight: 500;           
+    color: var(--text-main);    
+    line-height: 1.5;           
+    margin-top: 5px;
+    max-width: 100%;            
+}
+
+.exp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.ghost-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    border: 1px solid var(--accent-color);
+    border-radius: 10px;
+    color: var(--accent-color);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.ghost-btn:hover {
+    background-color: var(--accent-color);
+    color: #ffffff;
+}
+
+
+@media (max-width: 768px) {
+    .experience-card {
+        padding: 25px;
+    }
+    
+    .exp-role {
+        font-size: 1.4rem;
+    }
+
+    .exp-grid {
+        grid-template-columns: 1fr; 
+    }
+}

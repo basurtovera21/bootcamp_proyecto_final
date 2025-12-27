@@ -1,0 +1,85 @@
+.cards-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 30px; 
+}
+
+.section-separator {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 30px;
+}
+
+.experience-card {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    transition: transform 0.2s ease;
+    padding-top: 40px;
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-bottom: 30px !important;
+}
+
+.experience-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+}
+
+.exp-role {
+    font-size: 1.5rem;          
+    font-weight: 700;           
+    color: var(--accent-color); 
+    text-transform: uppercase;  
+    margin-bottom: 15px;
+    line-height: 1.2;
+    word-wrap: break-word;      
+    overflow-wrap: break-word;  
+    max-width: 100%;   
+}
+
+.exp-block {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.profile-description {
+    font-size: 1.1rem;          
+    font-weight: 500;           
+    color: var(--text-main);    
+    line-height: 1.5;           
+    margin-top: 5px;
+    max-width: 100%;            
+}
+
+.exp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.experience-card > *:last-child,
+.exp-grid .contact-item:last-child,
+.exp-block:last-child, 
+.exp-block p:last-child {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+
+@media (max-width: 768px) {
+    .experience-card {
+        padding: 25px;
+        padding-bottom: 20px !important; 
+    }
+    
+    .exp-role {
+        font-size: 1.4rem; 
+    }
+    
+    .section-separator {
+        font-size: 1.5rem;
+    }
+}
