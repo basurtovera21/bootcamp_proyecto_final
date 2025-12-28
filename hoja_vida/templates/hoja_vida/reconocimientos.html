@@ -59,22 +59,34 @@
     </div>
     <nav class="nav-menu" style="margin-top: 60px;">
         <a href="{% url 'home' %}" class="nav-btn">
-            <span class="label-style">{{ btn.home }}</span>
+            <span class="label-style">{{ btn.home|default:"Inicio" }}</span>
         </a>
+
+        {% if menu_hay_experiencia %}
         <a href="{% url 'experiencia' %}" class="nav-btn">
-            <span class="label-style">{{ btn.experiencia }}</span>
+            <span class="label-style">{{ btn.experiencia|default:"Experiencia" }}</span>
         </a>
+        {% endif %}
+
+        {% if menu_hay_cursos %}
         <a href="{% url 'cursos' %}" class="nav-btn">
-            <span class="label-style">{{ btn.cursos }}</span>
+            <span class="label-style">{{ btn.cursos|default:"Formación" }}</span>
         </a>
+        {% endif %}
+
+        {% if menu_hay_proyectos %}
         <a href="{% url 'productos' %}" class="nav-btn">
             <span class="label-style">
-                {{ btn.prod_academico }} / {{ btn.prod_laboral }}
+                {{ btn.prod_academico|default:"Prod. Académico" }} / {{ btn.prod_laboral|default:"Laboral" }}
             </span>
         </a>
+        {% endif %}
+
+        {% if menu_hay_ventas %}
         <a href="{% url 'venta_garage' %}" class="nav-btn">
-            <span class="label-style">{{ btn.ventas }}</span>
+            <span class="label-style">{{ btn.ventas|default:"Venta Garage" }}</span>
         </a>
+        {% endif %}
     </nav>
 </div>
 {% endblock %}

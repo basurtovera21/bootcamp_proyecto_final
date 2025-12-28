@@ -1,6 +1,6 @@
 """
 Django settings for core project.
-Optimized for Local Development and Azure Deployment.
+Optimized for Local Development, Neon DB and Azure Storage.
 """
 
 from pathlib import Path
@@ -8,20 +8,19 @@ import os
 import dj_database_url
 from dotenv import load_dotenv
 
-# [NUEVO] Cargar variables de entorno desde el archivo .env (si existe)
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# [NUEVO] Seguridad: Leemos la clave del entorno, si no existe (en producción sin configurar), falla.
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-clave-temporal-por-si-acaso')
 
-# [NUEVO] DEBUG: Será True solo si en el .env dice "True". En Azure será False por defecto.
-DEBUG = os.getenv('DEBUG', 'False') == 'True'
+DEBUG = True
 
-# [NUEVO] Permitimos localhost y cualquier dominio de Azure (.azurewebsites.net)
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.azurewebsites.net', '*']
+ALLOWED_HOSTS = ['*']
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://hoja-vida-bootcampcbv.azurewebsites.net',
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -30,14 +29,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # [NUEVO] Librería para guardar fotos en Azure
-    'storages', 
+    'storages',
     'hoja_vida',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    # [NUEVO] WhiteNoise va justo después de SecurityMiddleware
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -52,13 +49,14 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [], # Puedes agregar [BASE_DIR / 'templates'] si creas una carpeta global
+        'DIRS': [], 
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'hoja_vida.context_processors.visibilidad_menu',
             ],
         },
     },
@@ -67,18 +65,15 @@ TEMPLATES = [
 WSGI_APPLICATION = 'core.wsgi.application'
 
 
-# [NUEVO] Base de Datos Inteligente
-# 1. Intenta buscar una base de datos en la nube (DATABASE_URL)
-# 2. Si no la encuentra, usa la configuración local del archivo .env
+
+NEON_DB_URL = os.getenv('NEON_DB_URL')
+
+
+
 DATABASES = {
-    'default': dj_database_url.config(
-        default=f"postgres://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}",
-        conn_max_age=600
-    )
+    'default': dj_database_url.config(default=NEON_DB_URL, conn_max_age=600)
 }
 
-
-# Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -86,40 +81,39 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-
-# Internationalization
-LANGUAGE_CODE = 'es-ec' # [OPCIONAL] Lo puse en Español Ecuador, puedes dejarlo en en-us
-TIME_ZONE = 'America/Guayaquil' # [OPCIONAL] Zona horaria
+LANGUAGE_CODE = 'es-ec'
+TIME_ZONE = 'America/Guayaquil'
 USE_I18N = True
 USE_TZ = True
 
 
-# =========================================================
-# [NUEVO] ARCHIVOS ESTÁTICOS Y MEDIA (CSS e Imágenes)
-# =========================================================
-
 STATIC_URL = 'static/'
-# Carpeta donde se recolectarán los estilos para producción
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') 
-# Motor de almacenamiento para CSS (WhiteNoise con compresión)
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 
-# [NUEVO] Lógica Híbrida para Archivos Media (Fotos)
-# Si configuramos las claves de Azure, usamos la nube. Si no, usamos carpeta local.
 
-AZURE_ACCOUNT_NAME = os.getenv('AZURE_ACCOUNT_NAME')
-AZURE_ACCOUNT_KEY = os.getenv('AZURE_ACCOUNT_KEY')
-AZURE_CONTAINER = os.getenv('AZURE_CONTAINER')
+AZURE_CONNECTION_STRING = os.getenv('AZURE_CONNECTION_STRING')
 
-if AZURE_ACCOUNT_NAME and AZURE_ACCOUNT_KEY:
-    # --- CONFIGURACIÓN PARA AZURE (PRODUCCIÓN) ---
-    DEFAULT_FILE_STORAGE = 'storages.backends.azure_storage.AzureStorage'
-    MEDIA_URL = f'https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/{AZURE_CONTAINER}/'
-else:
-    # --- CONFIGURACIÓN LOCAL (DESARROLLO) ---
-    MEDIA_URL = '/media/'
-    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# Configuración básica para el ID automático
+
+AZURE_ACCOUNT_NAME = 'archivoscbv'
+AZURE_CONTAINER = 'media'
+AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
+
+
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.azure_storage.AzureStorage",
+        "OPTIONS": {
+            "connection_string": AZURE_CONNECTION_STRING,
+            "azure_container": AZURE_CONTAINER,
+        },
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
+
+MEDIA_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{AZURE_CONTAINER}/'
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
