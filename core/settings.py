@@ -71,7 +71,11 @@ NEON_DB_URL = os.getenv('NEON_DB_URL')
 
 
 DATABASES = {
-    'default': dj_database_url.config(default=NEON_DB_URL, conn_max_age=600)
+    'default': dj_database_url.config(
+        default=os.getenv('NEON_DB_URL'),
+        conn_max_age=600,
+        ssl_require=True
+    )
 }
 
 AUTH_PASSWORD_VALIDATORS = [
